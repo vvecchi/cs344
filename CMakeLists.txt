@@ -12,6 +12,7 @@ find_package(OpenCV REQUIRED)
 find_package(CUDA REQUIRED)
 
 link_libraries(${OpenCV_LIBS} )
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 set (EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/")
 
@@ -21,15 +22,15 @@ if(CUDA_FOUND)
   # to make sure more people can easily run class code without knowing 
   # about this compiler argument
   set(CUDA_NVCC_FLAGS "
-  -ccbin /usr/bin/clang; 
-  -gencode;arch=compute_30,code=sm_30;  
+  #-ccbin /usr/bin/clang; 
+  #-gencode;arch=compute_30,code=sm_30;  
   -gencode;arch=compute_35,code=sm_35;
-  -gencode;arch=compute_35,code=compute_35;
-  -gencode;arch=compute_20,code=sm_20; 
-  -gencode;arch=compute_11,code=sm_11; 
-  -gencode;arch=compute_12,code=sm_12;
-  -gencode;arch=compute_13,code=sm_13;")
-
+  -gencode;arch=compute_61,code=compute_61;")
+ # -gencode;arch=compute_20,code=sm_20; 
+ # -gencode;arch=compute_11,code=sm_11; 
+ # -gencode;arch=compute_12,code=sm_12;
+ # -gencode;arch=compute_13,code=sm_13;"
+ list(APPEND CUDA_NVCC_FLAGS --cl-version=2017) 
   # add -Wextra compiler flag for gcc compilations
   if (UNIX)
     set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-Xcompiler -Wextra")
@@ -39,12 +40,14 @@ if(CUDA_FOUND)
   # add debugging to CUDA NVCC flags.  For NVidia's NSight tools.
   set(CUDA_NVCC_FLAGS_DEBUG ${CUDA_NVCC_FLAGS_DEBUG} "-G")
 
-  add_subdirectory (HW1)
-  add_subdirectory (HW2)
-  add_subdirectory (HW3)
-  add_subdirectory (HW4)
-  add_subdirectory (HW5)
-  add_subdirectory (HW6)
+  add_subdirectory (Problem\ Sets/Problem\ Set\ 1)
+  add_subdirectory (Problem\ Sets/Problem\ Set\ 2)
+  add_subdirectory (Problem\ Sets/Problem\ Set\ 3)
+  add_subdirectory (Problem\ Sets/Problem\ Set\ 4)
+  add_subdirectory (Problem\ Sets/Problem\ Set\ 5)
+  add_subdirectory (Problem\ Sets/Problem\ Set\ 6)
+  
+  set(CUDA_HOST_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.10.25017/bin/HostX64/x64/cl.exe")
 else(CUDA_FOUND)
   message("CUDA is not installed on this system.")
 endif()
